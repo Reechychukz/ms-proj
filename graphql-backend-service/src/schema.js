@@ -1,7 +1,7 @@
-import { ApolloServer } from "@apollo/server";
-import { startStandaloneServer } from "@apollo/server/standalone";
+// import { ApolloServer } from "@apollo/server";
+// import { startStandaloneServer } from "@apollo/server/standalone";
 
-export const typeDefs = `#graphql
+const typeDefs = `#graphql
     # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
 
     # This "User" type defines the queryable fields for every user in our data source.
@@ -39,3 +39,4 @@ export const typeDefs = `#graphql
         user: User
     }
 `;
+module.exports = typeDefs;

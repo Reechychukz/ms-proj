@@ -1,4 +1,4 @@
-import { Jwt } from "jsonwebtoken";
+const jwt = require("jsonwebtoken");
 
 const secretKey = "your-secret-key"; // Replace with your actual secret key
 

@@ -1,7 +1,7 @@
 //const User = require("./models/User"); // You'll create this model later
-import User from "../../mongodb-service/models/User.js";
+const User = require("../../mongodb-service/models/User");
 
-export const resolvers = {
+const resolvers = {
   Query: {
     getUser: (id) => User,
     getUsers: () => [User],
@@ -16,4 +16,4 @@ export const resolvers = {
   },
 };
 
-//module.exports = resolvers;
+module.exports = resolvers;
