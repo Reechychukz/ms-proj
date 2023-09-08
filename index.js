@@ -12,30 +12,17 @@ const bodyParser = require("body-parser");
 
 const typeDefs = require("./graphql-backend-service/src/schema");
 const resolvers = require("./graphql-backend-service/src/resolvers");
-const generateToken = require("./graphql-backend-service/src/auth.js");
+const determineStatusCodeBasedOnError = require("./graphql-backend-service/src/helpers/determineStatusCodeBasedOnError");
+const generateToken = require("./graphql-backend-service/src/helpers/generateJWTToken.js");
 
 const User = require("./mongodb-service/models/User");
 
-const GraphQLSchema = makeExecutableSchema({ typeDefs, resolvers });
+const UserSchema = makeExecutableSchema({ typeDefs, resolvers });
 
 /**
  * Create Express server.
  */
 const app = express();
-
-// /**
-//  * Connect to MongoDB.
-//  */
-// mongoose.connect(process.env.MONGODB, {
-//   useMongoClient: true,
-// });
-// mongoose.connection.on("error", function () {
-//   console.log(
-//     "MongoDB Connection Error. Please make sure that MongoDB is running."
-//   );
-//   process.exit(1);
-// });
-// mongoose.set("debug", true);
 
 /**
  * Express configuration.
@@ -64,22 +51,33 @@ app.use(
 );
 
 // =========== GraphQL setting  ========== //
-app.use("/graphql", async (req, res, done) => {
-  var userId = req.auth && req.auth.id ? req.auth.id : undefined;
-  const user = userId ? await User.findById(userId) : undefined;
-  req.context = {
-    user: user,
-  };
-  done();
-});
+// app.use("/graphql", async (req, res, done) => {
+//   var userId = req.auth && req.auth.id ? req.auth.id : undefined;
+//   const user = userId ? await User.findById(userId) : undefined;
+//   req.context = {
+//     user: user,
+//   };
+//   done();
+// });
 app.use(
   "/graphql",
   graphqlHTTP((req) => ({
-    schema: GraphQLSchema,
+    schema: UserSchema,
     context: req.context,
     graphiql: process.env.NODE_ENV === "development",
+    formatError: (error) => {
+      // Customize error handling here
+      const statusCode = determineStatusCodeBasedOnError(error);
+      return {
+        message: error.message,
+        statusCode,
+        locations: error.locations,
+        path: error.path,
+      };
+    },
   }))
 );
+
 // =========== GraphQL setting END ========== //
 
 // Start the Express server
