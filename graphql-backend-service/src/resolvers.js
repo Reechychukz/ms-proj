@@ -1,5 +1,5 @@
-//const User = require("./models/User"); // You'll create this model later
 const User = require("../../mongodb-service/models/User");
+const authController = require("./controller/authController");
 
 const resolvers = {
   Query: {
@@ -8,10 +8,13 @@ const resolvers = {
   },
   Mutation: {
     signup: async (_, args) => {
-      // Implement user signup logic and save data to MongoDB
+      return authController.signup(args);
     },
-    login: async (_, { email, password }) => {
-      // Implement user login logic, generate JWT, and return it
+    login: async (_, args) => {
+      return authController.login(args);
+    },
+    refreshToken: async (_, args) => {
+      return authController.refreshToken(args);
     },
   },
 };
