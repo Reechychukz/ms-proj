@@ -6,7 +6,7 @@ const typeDefs = `#graphql
 
     # This "User" type defines the queryable fields for every user in our data source.
     type User {
-        id: ID!
+        id: ID
         email: String!
         username: String
         firstName: String
@@ -22,21 +22,38 @@ const typeDefs = `#graphql
     }
 
     type Mutation {
-        signup(email: String!, username: String!, firstName: String, lastName: String, password: String!): User
-        login(email: String!, password: String!): String
+        signup(email: String!, username: String!, firstName: String, lastName: String, password: String!): SignupMutationResponse
+        login(email: String!, password: String!): LoginMutationResponse
+        refreshToken(token: String!): RefreshTokenMutationResponse
     }
 
     interface MutationResponse {
-        code: String!
+        code: Int!
         success: Boolean!
         message: String!
     }
 
     type SignupMutationResponse implements MutationResponse {
-        code: String!
+        id: ID
+        code: Int!
         success: Boolean!
         message: String!
-        user: User
+        user: User!
     }
+
+    type LoginMutationResponse implements MutationResponse {
+        code: Int!
+        success: Boolean!
+        message: String!
+        user: User!
+        token: String
+    }
+
+    type RefreshTokenMutationResponse {
+        code: Int!
+        success: Boolean!
+        message: String!
+        accessToken: String
+      }
 `;
 module.exports = typeDefs;
