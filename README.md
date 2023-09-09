@@ -2,6 +2,8 @@
 
 > Nodejs-Javacript | Express | GraphQL | MongoDB API Task.
 
+> View live version at https://ms-proj.onrender.com/graphql
+
 ## Features
 
 > This project uses Node.js v14 and MongoDB.
@@ -41,6 +43,8 @@ npm test
 
 ## Query Examples
 
+> Mutations
+
 ```js
 mutation Signup {
     signup(
@@ -56,8 +60,40 @@ mutation Signup {
         message
     }
 }
-
 ```
+
+```js
+mutation Login {
+    login(email: "johndoe@email.com", password: "12345678910") {
+        code
+        success
+        message
+        token
+        user {
+            id
+            email
+            username
+            firstName
+            lastName
+        }
+    }
+}
+```
+
+```js
+mutation RefreshToken {
+    refreshToken(
+        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGZjNjRlMzJmNjcxZGI4ODNhMGY1M2IiLCJpYXQiOjE2OTQyOTIzMDUsImV4cCI6MTY5NDI5NTkwNX0.hZgwm5rSzVtkk5pgBI35WnUbtPfUjMzvgZyPBvUpLcU"
+    ) {
+        code
+        success
+        message
+        accessToken
+    }
+}
+```
+
+> Queries
 
 ```js
 query GetUserById {
@@ -74,6 +110,24 @@ query GetUserById {
         }
     }
 }
+```
+
+```js
+query GetAllUsers {
+    getAllUsers {
+        code
+        success
+        message
+        user {
+            id
+            email
+            username
+            firstName
+            lastName
+        }
+    }
+}
+
 ```
 
 ## Architecture
