@@ -1,4 +1,4 @@
-# graphql-example
+# ms-proj
 
 > Nodejs-Javacript | Express | GraphQL | MongoDB API Task.
 
