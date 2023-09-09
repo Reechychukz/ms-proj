@@ -8,7 +8,6 @@
 
 > This project uses Node.js v14 and MongoDB.
 
-- GraphQL rootValue using [RawModel.js](https://github.com/xpepermint/rawmodeljs).
 - Authentication endpoints (SIgnup and Login).
 - Query users or specific user by id.
 
