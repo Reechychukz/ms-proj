@@ -133,14 +133,33 @@ query GetAllUsers {
 ## Architecture
 
 ```
-
-|- ./config       - config files
-|- ./index.js     - application main file
-|- ./.env         - env sample
-|- ./services     - major services
+ms-proj
+├── config
+│   └── database.js
+├── middleware
+│   └── loggingMiddleware.js
+├── services
+│   ├── graphql-service
+│   │   └── src
+│   │       ├── controller
+│   │       │   └── authController.js
+│   │       ├── helpers
+│   │       │   ├── determineStatusCodeBasedOnError.js
+│   │       │   ├── generateJWTToken.js
+│   │       │   ├── logger.js
+│   │       │   └── validate.js
+│   │       └── resolvers.js
+│   └── mongodb-service
+│       └── src
+│           ├── graphql
+│           │   └── typeDef.js
+│           ├── models
+│           │   └── User.js
+│           └── updateTypeDefs.js
+├── index.js
+├── package-lock.json
+└── package.json
 
 ```
-
-Graph application describes your data model and provides a communication layer. HTTP application exposes GraphQL application over HTTP thus users can use the GraphQL application as your API endpoint.
 
 The HTTP server is based on [express-graphql](https://github.com/graphql/express-graphql) which is a bridge to communicate with a GraphQL application via [Express](http://expressjs.com/) HTTP server. The `express-graphql` middleware includes a [GraphiQL](https://github.com/graphql/graphiql) user interface which is a generic interface for running GraphQL queries and mutations (for use in development).
