@@ -15,6 +15,7 @@
 
 - Node.js v14+(recommended).
 - Install and start MongoDB server.
+- Setup environment variables in .env file using the .env_sample template provided
 
 ## Build Setup
 
