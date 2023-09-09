@@ -3,10 +3,12 @@ const authController = require("./controller/authController");
 
 const resolvers = {
   Query: {
-    getCurrentUser: async (_, args) => {
-      return authController.getCurrentUser(args);
+    getUserById: async (_, args) => {
+      return authController.getUserById(args);
     },
-    getUsers: () => [User],
+    getAllUsers: async () => {
+      return authController.getAllUsers();
+    },
   },
   Mutation: {
     signup: async (_, args) => {

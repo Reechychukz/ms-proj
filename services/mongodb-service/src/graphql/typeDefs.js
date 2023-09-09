@@ -14,8 +14,8 @@ const typeDefs = `#graphql
     # clients can execute, along with the return type for each. In the
     # case, the "getUsers" query returns an array of zero or more users (defined above).
     type Query {
-        getUsers: [User]
-        getCurrentUser: String
+        getAllUsers: GetAllUsersQueryResponse
+        getUserById(id: ID!): GetUserByIdQueryResponse
     }
 
     type Mutation {
@@ -30,8 +30,13 @@ const typeDefs = `#graphql
         message: String!
     }
 
+    interface QueryResponse {
+        code: Int
+        success: Boolean!
+        message: String!
+    }
+
     type SignupMutationResponse implements MutationResponse {
-        id: ID
         code: Int!
         success: Boolean!
         message: String!
@@ -51,6 +56,20 @@ const typeDefs = `#graphql
         success: Boolean!
         message: String!
         accessToken: String
-      }
+    }
+
+    type GetUserByIdQueryResponse implements QueryResponse {
+        code: Int!
+        success: Boolean!
+        message: String!
+        user: User
+    }
+
+    type GetAllUsersQueryResponse implements QueryResponse {
+        code: Int!
+        success: Boolean!
+        message: String!
+        user: [User]
+    }
 `;
 module.exports = typeDefs;

@@ -1,3 +1,8 @@
+/**
+ * Helper function to determine status code to return on error
+ * @param {*} error - error triggered
+ * @returns {Number} - Status code
+ */
 const determineStatusCodeBasedOnError = (error) => {
   switch (error.message) {
     case "Unauthorized":
