@@ -1,9 +1,11 @@
-const User = require("../../mongodb-service/models/User");
+const User = require("../../mongodb-service/src/models/User");
 const authController = require("./controller/authController");
 
 const resolvers = {
   Query: {
-    getUser: (id) => User,
+    getCurrentUser: async (_, args) => {
+      return authController.getCurrentUser(args);
+    },
     getUsers: () => [User],
   },
   Mutation: {

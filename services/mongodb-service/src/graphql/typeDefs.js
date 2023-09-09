@@ -1,6 +1,3 @@
-// import { ApolloServer } from "@apollo/server";
-// import { startStandaloneServer } from "@apollo/server/standalone";
-
 const typeDefs = `#graphql
     # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
 
@@ -18,7 +15,7 @@ const typeDefs = `#graphql
     # case, the "getUsers" query returns an array of zero or more users (defined above).
     type Query {
         getUsers: [User]
-        getUser(id: ID!): User
+        getCurrentUser: String
     }
 
     type Mutation {

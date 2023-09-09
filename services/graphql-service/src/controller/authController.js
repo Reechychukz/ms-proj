@@ -1,7 +1,10 @@
 const bcrypt = require("bcryptjs");
-const { User } = require("../../../mongodb-service/models/User");
+const { User } = require("../../../mongodb-service/src/models/User");
 const validate = require("../helpers/validate");
 const generateJWTToken = require("../helpers/generateJWTToken");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const secretKey = process.env.JWT_SECRET_KEY;
 
 const authController = {
   signup: async ({ firstName, lastName, username, email, password }) => {
@@ -105,11 +108,12 @@ const authController = {
     }
   },
 
-  refreshToken: async ({ refreshToken }) => {
+  refreshToken: async ({ token }) => {
     try {
       // Verify and decode the refresh token
-      const decodedToken = jwt.verify(refreshToken, secretKey);
-
+      console.log(token);
+      const decodedToken = jwt.verify(token, secretKey);
+      console.log(decodedToken);
       // Check if the decoded token is valid
       if (!decodedToken || !decodedToken.userId) {
         const error = new Error("Invalid Refresh Token");
@@ -118,13 +122,38 @@ const authController = {
       }
 
       // Generate a new access token
-      const accessToken = generateJWTToken(decodedToken.userId);
+      const accessToken = generateJWTToken.generateToken(decodedToken.userId);
 
       const response = {
         code: 200,
         success: true,
         message: "Token Refreshed Successfully",
         accessToken,
+      };
+      return response;
+    } catch (error) {
+      console.log(error);
+      const err = new Error(error);
+      throw err;
+    }
+  },
+
+  getCurrentUser: async (_, __, context) => {
+    try {
+      // Access the authenticated user from context
+      const { req } = context;
+
+      if (!req || !req.user) {
+        // Authorization header is missing or invalid
+        return null;
+      }
+
+      const user = req.user;
+      const response = {
+        code: 200,
+        success: true,
+        message: "User found",
+        user,
       };
       return response;
     } catch (error) {

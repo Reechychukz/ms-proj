@@ -10,12 +10,12 @@ const { makeExecutableSchema } = require("graphql-tools");
 const logger = require("morgan");
 const bodyParser = require("body-parser");
 
-const typeDefs = require("./graphql-backend-service/src/schema");
-const resolvers = require("./graphql-backend-service/src/resolvers");
-const determineStatusCodeBasedOnError = require("./graphql-backend-service/src/helpers/determineStatusCodeBasedOnError");
-const generateToken = require("./graphql-backend-service/src/helpers/generateJWTToken.js");
+const typeDefs = require("./services/mongodb-service/src/graphql/typeDefs");
+const resolvers = require("./services/graphql-service/src/resolvers");
+const determineStatusCodeBasedOnError = require("./services/graphql-service/src/helpers/determineStatusCodeBasedOnError");
+const generateToken = require("./services/graphql-service/src/helpers/generateJWTToken.js");
 
-const User = require("./mongodb-service/models/User");
+const User = require("./services/mongodb-service/src/models/User");
 
 const UserSchema = makeExecutableSchema({ typeDefs, resolvers });
 
@@ -51,20 +51,29 @@ app.use(
 );
 
 // =========== GraphQL setting  ========== //
-// app.use("/graphql", async (req, res, done) => {
-//   var userId = req.auth && req.auth.id ? req.auth.id : undefined;
-//   const user = userId ? await User.findById(userId) : undefined;
-//   req.context = {
-//     user: user,
-//   };
-//   done();
-// });
+
+// Middleware for extracting and verifying JWT token
+app.use((req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    const token = authHeader.split(" ")[1];
+    try {
+      const decodedToken = jwt.verify(token, "your-secret-key");
+      req.user = decodedToken; // Attach the decoded token to req.user
+    } catch (error) {
+      // Handle token verification error
+    }
+  }
+  next();
+});
+
 app.use(
   "/graphql",
   graphqlHTTP((req) => ({
     schema: UserSchema,
     context: req.context,
     graphiql: process.env.NODE_ENV === "development",
+    context: { req }, // Pass user from req to context
     formatError: (error) => {
       // Customize error handling here
       const statusCode = determineStatusCodeBasedOnError(error);
