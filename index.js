@@ -40,8 +40,6 @@ app.use(
       return {
         message: error.message,
         statusCode,
-        locations: error.locations,
-        path: error.path,
       };
     },
   }))
